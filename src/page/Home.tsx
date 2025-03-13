@@ -10,10 +10,10 @@ import {
     AvatarGroup
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import Nav from '../components/Nav';
 import CoffeeShopLanding from './About';
 import CoffeeMenu from './CoffeeMenu';
-import Comments from './Comments'; // Add this import
+import Comments from './Comments';
+import BlogSection from './Blog';
 
 // Coffee product type
 interface CoffeeProduct {
@@ -24,7 +24,8 @@ interface CoffeeProduct {
 
 const Home: React.FC = () => {
     const aboutSectionRef = useRef<HTMLDivElement>(null);
-    const testimonialsSectionRef = useRef<HTMLDivElement>(null); // Add this ref for testimonials
+    const testimonialsSectionRef = useRef<HTMLDivElement>(null);
+    const blogSectionRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
     
     // Best selling products
@@ -46,18 +47,29 @@ const Home: React.FC = () => {
         }
     ];
 
-    // Scroll to section if URL has hash
     useEffect(() => {
         if (location.hash === '#about-section') {
             setTimeout(() => {
                 if (aboutSectionRef.current) {
-                    aboutSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+                    const yOffset = -80; // Adjust based on navbar height
+                    const y = aboutSectionRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
                 }
             }, 100);
         } else if (location.hash === '#testimonials-section') {
             setTimeout(() => {
                 if (testimonialsSectionRef.current) {
-                    testimonialsSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+                    const yOffset = -80; // Adjust based on navbar height
+                    const y = testimonialsSectionRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            }, 100);
+        } else if (location.hash === '#blog-section') {
+            setTimeout(() => {
+                if (blogSectionRef.current) {
+                    const yOffset = -80; // Adjust based on navbar height
+                    const y = blogSectionRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
                 }
             }, 100);
         }
@@ -66,18 +78,14 @@ const Home: React.FC = () => {
     return (
         <Box sx={{
             bgcolor: '#FFF5EE',
-            minHeight: '100vh',
-            overflow: 'hidden',
             position: 'relative'
         }}>
-            {/* Navigation Bar */}
+            {/* Main Content */}
             <Container maxWidth="xl" sx={{ 
                 pt: 2,
-                pb: 6, // Add bottom padding to container
-                px: { xs: 2, sm: 3, md: 4 } // Responsive horizontal padding
+                pb: 6,
+                px: { xs: 2, sm: 3, md: 4 }
             }}>
-                <Nav />
-
                 {/* Main Content */}
                 <Grid container spacing={3} sx={{ mt: 0 }}>
                     {/* Left Column - Text and CTAs */}
@@ -293,11 +301,11 @@ const Home: React.FC = () => {
                     id="about-section"
                     ref={aboutSectionRef}
                     sx={{ 
-                        scrollMarginTop: '80px', // Reduced from 100px
-                        mb: 6 // Consistent bottom margin for all sections
+                        scrollMarginTop: '80px',
+                        mb: 6
                     }}
                 >
-                    <Typography
+                    {/* <Typography
                         variant="h4"
                         component="h2"
                         sx={{
@@ -308,7 +316,7 @@ const Home: React.FC = () => {
                         }}
                     >
                         About Us
-                    </Typography>
+                    </Typography> */}
 
                     <Box 
                         sx={{ 
@@ -333,13 +341,50 @@ const Home: React.FC = () => {
                     <CoffeeMenu />
                 </Box>
                 
+                {/* Blog Section */}
+                <Box 
+                    id="blog-section"
+                    ref={blogSectionRef}
+                    sx={{ 
+                        scrollMarginTop: '80px',
+                        mb: 6
+                    }}
+                >
+                    <Typography
+                        variant="h4"
+                        component="h2"
+                        sx={{
+                            color: '#1A0F00',
+                            mb: 2,
+                            textAlign: 'center',
+
+                            fontWeight: 700,
+                            fontSize: { xs: '2.5rem', md: '3.5rem' },
+                            lineHeight: 1.2
+                        }}
+                    >
+                       Story In Our
+                    </Typography>
+
+                    <Box 
+                        sx={{ 
+                            backgroundColor: '#FFF5EE',
+                            borderRadius: '16px',
+                            overflow: 'hidden',
+                            boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.04)'
+                        }}
+                    >
+                        <BlogSection />
+                    </Box>
+                </Box>
+                
                 {/* Testimonials Section */}
                 <Box 
                     id="testimonials-section"
                     ref={testimonialsSectionRef}
                     sx={{ 
                         scrollMarginTop: '80px',
-                        mb: 0 // No bottom margin on the last section
+                        mb: 0
                     }}
                 >
                     <Typography
@@ -348,11 +393,14 @@ const Home: React.FC = () => {
                         sx={{
                             fontWeight: 600,
                             color: '#1A0F00',
-                            mb: 3,
-                            textAlign: 'center'
+                            textAlign: 'center',
+
+                            fontSize: { xs: '2.5rem', md: '3.5rem' },
+                            lineHeight: 1.2,
+                            mb: 2
                         }}
                     >
-                        Customer Reviews
+                        What Our Buyers Say
                     </Typography>
 
                     <Box 

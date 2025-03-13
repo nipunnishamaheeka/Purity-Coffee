@@ -1,17 +1,22 @@
-import './App.css'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import RootLayout from "./components/layout/RootLayout.tsx";
-function App() {
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './page/Home';
+import About from './page/About';
+import RootLayout from './components/layout/RootLayout';
 
+
+function App() {
   return (
-   <BrowserRouter>
-       <Routes>
-            <Route path="/app" element={<RootLayout />} />
-           {/* <Route path="/contact" element={<Contact />} />*/}
-           {/*<Route path="/about" element={<About />} />*/}
-       </Routes>
-   </BrowserRouter>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route element={<RootLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="*" element={<Home />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

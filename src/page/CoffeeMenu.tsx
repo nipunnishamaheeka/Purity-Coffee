@@ -11,8 +11,6 @@ import {
     Grid,
 } from '@mui/material';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-// import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-// import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 interface CoffeeItem {
     id: number;
@@ -29,10 +27,9 @@ const CoffeeMenu: React.FC = () => {
     const [selectedType, setSelectedType] = useState<string>('Latte');
     const [currentCardIndex, setCurrentCardIndex] = useState<number>(0);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const displayedCards = 4; // Number of cards to display at once
-    const cardWidth = 25; // Card width as percentage (25% = 4 cards per view)
+    const displayedCards = 4; 
+    const cardWidth = 25; 
 
-    // Coffee data
     const coffeeItems: CoffeeItem[] = [
         {
             id: 1,
@@ -144,11 +141,8 @@ const CoffeeMenu: React.FC = () => {
             price: 2.4
         }
     ];
-
-    // Filter coffee by selected type
     const filteredCoffee = coffeeItems.filter(coffee => coffee.type === selectedType);
 
-    // Reset current card index when coffee type changes
     useEffect(() => {
         setCurrentCardIndex(0);
         if (scrollContainerRef.current) {
@@ -156,7 +150,7 @@ const CoffeeMenu: React.FC = () => {
         }
     }, [selectedType]);
 
-    // Handle scroll to specific card
+
     const scrollToCard = (index: number) => {
         if (scrollContainerRef.current && index >= 0 && index < filteredCoffee.length) {
             setCurrentCardIndex(index);
@@ -209,18 +203,23 @@ const CoffeeMenu: React.FC = () => {
         >
             <Container maxWidth="lg">
                 {/* Heading */}
+                 
                 <Typography
                     variant="h3"
                     component="h2" // Changed to h2 for proper document outline
                     align="center"
                     sx={{
-                        mb: 4, // Reduced from mb: 6
-                        fontWeight: 500,
-                        color: '#333',
-                        px: 2
+                       
+                        px: 2,
+
+                        fontWeight: 700,
+                        fontSize: { xs: '2.5rem', md: '3.5rem' },
+                        lineHeight: 1.2,
+                        color: '#222',
+                        mb: 2
                     }}
                 >
-                    In ZARA you can create your own cafe
+                    In Purity you can create your own cafe
                 </Typography>
 
                 {/* Filter buttons */}
@@ -254,9 +253,9 @@ const CoffeeMenu: React.FC = () => {
                     ))}
                 </Box>
 
-                {/* Display four cards with horizontal swipe */}
+
                 <Box sx={{ position: 'relative', my: 4 }}>
-                    {/* Prev button (left) */}
+
                     <IconButton 
                         onClick={handlePrevCard}
                         disabled={currentCardIndex === 0}
@@ -274,17 +273,15 @@ const CoffeeMenu: React.FC = () => {
                             }
                         }}
                     >
-                        {/*<ArrowBackIosNewIcon fontSize="small" />*/}
                     </IconButton>
 
-                    {/* Fixed container for all cards */}
                     <Box sx={{ 
                         overflow: 'hidden', 
                         position: 'relative',
                         mx: 'auto',
-                        height: 'auto' // Ensure height is based on content
-                    }}>
-                        {/* Grid to show exactly 4 cards at once */}
+                        height: 'auto' 
+                        }}>
+
                         <Grid container spacing={2} sx={{ mb: 2, display: 'none' }}>
                             {[...Array(displayedCards)].map((_, i) => (
                                 <Grid item xs={12/displayedCards} key={`grid-${i}`}>
@@ -409,7 +406,6 @@ const CoffeeMenu: React.FC = () => {
                         </Box>
                     </Box>
 
-                    {/* Next button (right) */}
                     <IconButton 
                         onClick={handleNextCard}
                         disabled={currentCardIndex >= filteredCoffee.length - 1}
@@ -427,11 +423,10 @@ const CoffeeMenu: React.FC = () => {
                             }
                         }}
                     >
-                        {/*<ArrowForwardIosIcon fontSize="small" />*/}
+
                     </IconButton>
                 </Box>
-
-                {/* Pagination dots */}
+                
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
                     {filteredCoffee.map((_, index) => (
                         <IconButton 

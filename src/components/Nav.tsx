@@ -11,7 +11,6 @@ import {useNavigate, useLocation} from "react-router-dom";
 
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import GrainIcon from '@mui/icons-material/Grain';
-// Custom theme for coffee shop color scheme
 const theme = createTheme({
     palette: {
         primary: {
@@ -39,6 +38,24 @@ function CoffeeShopNavbar() {
     const location = useLocation();
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [activePage, setActivePage] = React.useState('Home');
+    const [scrolled, setScrolled] = React.useState(false);
+
+    React.useEffect(() => {
+        const handleScroll = () => {
+            const offset = window.scrollY;
+            if (offset > 10) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -52,42 +69,34 @@ function CoffeeShopNavbar() {
         setActivePage(page);
         console.log(`${page} clicked`);
         
-        // Special handling for About, Reviews, and Products
         if (page.toLowerCase() === 'about') {
             if (location.pathname === '/') {
-                // If on home page, scroll to About section
                 const aboutSection = document.getElementById('about-section');
                 if (aboutSection) {
                     aboutSection.scrollIntoView({ behavior: 'smooth' });
                 }
             } else {
-                // If not on home page, navigate to home page with hash
                 navigate('/#about-section');
             }
         } else if (page.toLowerCase() === 'reviews') {
             if (location.pathname === '/') {
-                // If on home page, scroll to Testimonials section
                 const testimonialSection = document.getElementById('testimonials-section');
                 if (testimonialSection) {
                     testimonialSection.scrollIntoView({ behavior: 'smooth' });
                 }
             } else {
-                // If not on home page, navigate to home page with hash
                 navigate('/#testimonials-section');
             }
         } else if (page.toLowerCase() === 'products') {
             if (location.pathname === '/') {
-                // If on home page, scroll to Products section
                 const productsSection = document.getElementById('products-section');
                 if (productsSection) {
                     productsSection.scrollIntoView({ behavior: 'smooth' });
                 }
             } else {
-                // If not on home page, navigate to home page with hash
                 navigate('/#products-section');
             }
         } else {
-            // Handle other pages normally
             let path;
             if (page.toLowerCase() === 'home') {
                 path = '/';
@@ -101,7 +110,6 @@ function CoffeeShopNavbar() {
         handleCloseNavMenu();
     };
 
-    // Check if we need to scroll to sections when coming from another page
     React.useEffect(() => {
         if (location.hash === '#about-section') {
             setTimeout(() => {
@@ -109,7 +117,7 @@ function CoffeeShopNavbar() {
                 if (aboutSection) {
                     aboutSection.scrollIntoView({ behavior: 'smooth' });
                 }
-            }, 100); // Small delay to ensure the DOM is ready
+            }, 100);
         } else if (location.hash === '#testimonials-section') {
             setTimeout(() => {
                 const testimonialSection = document.getElementById('testimonials-section');
@@ -133,8 +141,18 @@ function CoffeeShopNavbar() {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    mb: 4
-                }}>
+                    mb: 4,
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    zIndex: 1100,
+                    backgroundColor: scrolled ? 'rgba(255, 248, 241, 0.95)' : 'transparent',
+                    boxShadow: scrolled ? '0px 2px 4px rgba(0, 0, 0, 0.1)' : 'none',
+                    transition: 'all 0.3s ease',
+                    padding: '10px 20px',
+                    backdropFilter: scrolled ? 'blur(5px)' : 'none',
+                }}> 
                     {/* Logo */}
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <GrainIcon sx={{ mr: 1, transform: 'rotate(45deg)', color: '#5C3824' }} />
@@ -147,7 +165,7 @@ function CoffeeShopNavbar() {
                                 color: '#5C3824',
                             }}
                         >
-                            Bean & Co
+                           Purity Coffee
                         </Typography>
                     </Box>
 
@@ -187,7 +205,7 @@ function CoffeeShopNavbar() {
                         <IconButton size="large" sx={{ color: '#5C3824' }}>
                             <ShoppingBagOutlinedIcon />
                         </IconButton>
-                        <Button
+                        {/* <Button
                             variant="contained"
                             sx={{
                                 ml: 2,
@@ -200,12 +218,12 @@ function CoffeeShopNavbar() {
                             }}
                         >
                             Login
-                        </Button>
+                        </Button> */}
                     </Box>
                 </Box>
-
-            {/* Removing the duplicate AppBar since we already have a navigation bar above */}
-        </ThemeProvider>
+                
+               <Box sx={{ height: '80px' }} /> 
+            </ThemeProvider>
     );
 }
 
