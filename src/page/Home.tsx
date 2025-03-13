@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Typography,
     Button,
@@ -7,9 +7,12 @@ import {
     Grid,
     Paper,
     Avatar,
-    AvatarGroup
+    AvatarGroup,
+    Fab,
+    Zoom
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CoffeeShopLanding from './About';
 import CoffeeMenu from './CoffeeMenu';
 import Comments from './Comments';
@@ -27,23 +30,46 @@ const Home: React.FC = () => {
     const testimonialsSectionRef = useRef<HTMLDivElement>(null);
     const blogSectionRef = useRef<HTMLDivElement>(null);
     const location = useLocation();
+    const [showScrollTop, setShowScrollTop] = useState(false);
+    
+    // Control scroll to top button visibility
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollY = window.scrollY;
+            setShowScrollTop(scrollY > 300);
+        };
+        
+        window.addEventListener('scroll', handleScroll);
+        
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+    
+    // Scroll to top function
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
     
     // Best selling products
     const bestSellers: CoffeeProduct[] = [
         {
             name: 'Caffè Latte',
             price: 'GHS 32.99',
-            image: '/cafe-latte.jpg'
+            image: 'https://www.acouplecooks.com/wp-content/uploads/2021/08/Cafe-Au-Lait-001s.jpg'
         },
         {
             name: 'Black Iced Coffee',
             price: 'GHS 15.90',
-            image: '/black-iced-coffee.jpg'
+            image: 'https://media.istockphoto.com/id/1467199060/photo/cup-of-coffee-with-smoke-and-coffee-beans-on-old-wooden-background.jpg?s=612x612&w=0&k=20&c=OnS8_6FM5ussfSGmjpDD-GofERg2UbItdxShIAA90sQ='
         },
         {
             name: 'Coffee Mocha',
             price: 'GHS 12.99',
-            image: '/coffee-mocha.jpg'
+            image: 'https://content.api.news/v3/images/bin/534bb0a6aebf6dbc3667094d5a618631'
         }
     ];
 
@@ -92,20 +118,7 @@ const Home: React.FC = () => {
                     <Grid item xs={12} md={6}>
                         <Box sx={{ position: 'relative', py: { xs: 2, md: 4 } }}>
                             {/* Floating coffee bean decoration */}
-                            <Box
-                                component="img"
-                                src="https://media.cnn.com/api/v1/images/stellar/prod/150929101049-black-coffee-stock.jpg?q=w_3000,h_3074,x_0,y_0,c_fill"
-                                alt="Coffee bean"
-                                sx={{
-                                    position: 'absolute',
-                                    width: '30px',
-                                    top: '0px',
-                                    left: '250px',
-                                    transform: 'rotate(45deg)',
-                                    opacity: 0.8,
-                                    display: { xs: 'none', md: 'block' } // Hide on small screens
-                                }}
-                            />
+                            
 
                             {/* Heading and Subheading */}
                             <Typography
@@ -228,8 +241,9 @@ const Home: React.FC = () => {
                                                     alt={product.name}
                                                     sx={{
                                                         width: '100%',
-                                                        height: 'auto',
-                                                        objectFit: 'contain',
+                                                        height: '120px', // Fixed height for stability
+                                                        objectFit: 'cover', // Changed from 'contain' to 'cover'
+                                                        borderRadius: '8px', // Added border radius
                                                         mb: 1.5
                                                     }}
                                                 />
@@ -277,8 +291,11 @@ const Home: React.FC = () => {
                                 alt="Coffee cup with splash"
                                 sx={{
                                     maxWidth: '100%',
-                                    maxHeight: '600px',
-                                    transform: { xs: 'scale(0.9)', md: 'scale(1.1)' },
+                                    height: { xs: '350px', sm: '450px', md: '550px' }, // Responsive fixed height
+                                    objectFit: 'cover',
+                                    borderRadius: '16px', // Added border radius
+                                    boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.15)', // Added shadow for depth
+                                    transform: { xs: 'scale(0.9)', md: 'scale(1.05)' }, // Slightly reduced scale
                                     mt: { xs: -4, md: 0 }
                                 }}
                             />
@@ -383,8 +400,8 @@ const Home: React.FC = () => {
                     id="testimonials-section"
                     ref={testimonialsSectionRef}
                     sx={{ 
-                        scrollMarginTop: '80px',
-                        mb: 0
+                        scrollMarginTop: '100px', // Increased scroll margin for better offset
+                        mb: 6 // Added bottom margin to create space before footer
                     }}
                 >
                     <Typography
@@ -415,6 +432,28 @@ const Home: React.FC = () => {
                     </Box>
                 </Box>
             </Container>
+            
+            {/* Go to top button */}
+            <Zoom in={showScrollTop}>
+                <Fab 
+                    color="secondary"
+                    size="medium"
+                    aria-label="scroll back to top"
+                    onClick={scrollToTop}
+                    sx={{
+                        position: 'fixed',
+                        bottom: 20,
+                        right: 20,
+                        backgroundColor: '#5C3824',
+                        '&:hover': {
+                            backgroundColor: '#4A2C1C',
+                        },
+                        zIndex: 1000,
+                    }}
+                >
+                    <KeyboardArrowUpIcon />
+                </Fab>
+            </Zoom>
         </Box>
     );
 };

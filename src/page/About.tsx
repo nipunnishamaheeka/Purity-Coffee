@@ -37,15 +37,19 @@ const COFFEE_ITEMS = [
 ];
 
 const CoffeeGrid = () => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    
     return (
         <Box sx={{
             display: 'flex',
-            flexWrap: 'nowrap',
-            overflowX: 'auto',
-            gap: 2,
-            justifyContent: 'center',
-            py: 4,
-            pb: 2, 
+            flexWrap: { xs: 'nowrap', md: 'wrap' },
+            overflowX: { xs: 'auto', md: 'visible' },
+            gap: 3,
+            justifyContent: { xs: 'flex-start', md: 'center' },
+            py: 5,
+            px: { xs: 2, md: 0 },
+            pb: 3, 
             '&::-webkit-scrollbar': {
                 display: 'none'
             },
@@ -56,24 +60,61 @@ const CoffeeGrid = () => {
                 <Box
                     key={index}
                     sx={{
-                        minWidth: 200,
-                        maxWidth: 200,
+                        minWidth: { xs: 220, sm: 260 },
+                        maxWidth: { xs: 220, sm: 260 },
                         borderRadius: 2,
                         overflow: 'hidden',
                         flexShrink: 0,
+                        position: 'relative',
+                        transition: 'transform 0.3s ease',
+                        '&:hover': {
+                            transform: { xs: 'none', md: 'scale(1.05)' },
+                            boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
+                            '& .coffee-info': {
+                                opacity: 1,
+                            }
+                        },
                     }}
                 >
                     <Box
                         component="img"
                         sx={{
-                            height: 200,
+                            height: { xs: 220, sm: 280 },
                             width: '100%',
                             objectFit: 'cover',
                             borderRadius: 2,
+                            transition: 'filter 0.3s ease',
+                            '&:hover': {
+                                filter: { xs: 'brightness(1)', md: 'brightness(0.7)' },
+                            }
                         }}
                         src={item.imgPath}
                         alt={item.label}
+                        loading="lazy"
                     />
+                    <Box 
+                        className="coffee-info"
+                        sx={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            padding: 1.5,
+                            background: 'rgba(0,0,0,0.7)',
+                            color: 'white',
+                            opacity: { xs: 1, md: 0 }, // Always visible on mobile
+                            transition: 'opacity 0.3s ease',
+                            borderBottomLeftRadius: 2,
+                            borderBottomRightRadius: 2,
+                        }}
+                    >
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                            {item.label}
+                        </Typography>
+                        <Typography variant="body2">
+                            {item.description}
+                        </Typography>
+                    </Box>
                 </Box>
             ))}
         </Box>
@@ -110,7 +151,7 @@ const CoffeeShopLanding = () => {
                             mb: 2
                         }}
                     >
-                        Enjoy Your Coffee <br /> with ZARA
+                        Enjoy Your Coffee <br /> with Purity
                     </Typography>
 
                     <Typography

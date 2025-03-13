@@ -31,7 +31,7 @@ const theme = createTheme({
     },
 });
 
-const pages = ['Home', 'About', 'Products', 'Blog', 'Reviews', 'Contact'];
+const pages = ['Home', 'About', 'Products', 'Blog', 'Reviews'];
 
 function CoffeeShopNavbar() {
     const navigate = useNavigate();
@@ -39,18 +39,29 @@ function CoffeeShopNavbar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [activePage, setActivePage] = React.useState('Home');
     const [scrolled, setScrolled] = React.useState(false);
+    const [visible, setVisible] = React.useState(true);
+    const lastScrollY = React.useRef(0);
 
     React.useEffect(() => {
         const handleScroll = () => {
-            const offset = window.scrollY;
-            if (offset > 10) {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > 10) {
                 setScrolled(true);
             } else {
                 setScrolled(false);
             }
+            
+            if (currentScrollY > lastScrollY.current + 10) {
+                setVisible(false);
+            } else if (currentScrollY < lastScrollY.current - 10) {
+                setVisible(true);
+            }
+            
+            lastScrollY.current = currentScrollY;
         };
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         
         return () => {
             window.removeEventListener('scroll', handleScroll);
@@ -65,83 +76,103 @@ function CoffeeShopNavbar() {
         setAnchorElNav(null);
     };
 
+    const scrollToElement = (elementId: string) => {
+        setTimeout(() => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                // Calculate position with offset for fixed navbar
+                const navbarHeight = 80; // Height of your navbar
+                const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+                const offsetPosition = elementPosition - navbarHeight;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }, 100);
+    };
+    
     const handleMenuClick = (page: string) => {
         setActivePage(page);
-        console.log(`${page} clicked`);
         
         if (page.toLowerCase() === 'about') {
             if (location.pathname === '/') {
-                const aboutSection = document.getElementById('about-section');
-                if (aboutSection) {
-                    aboutSection.scrollIntoView({ behavior: 'smooth' });
-                }
+                scrollToElement('about-section');
             } else {
                 navigate('/#about-section');
             }
         } else if (page.toLowerCase() === 'reviews') {
             if (location.pathname === '/') {
-                const testimonialSection = document.getElementById('testimonials-section');
-                if (testimonialSection) {
-                    testimonialSection.scrollIntoView({ behavior: 'smooth' });
-                }
+                scrollToElement('testimonials-section');
             } else {
                 navigate('/#testimonials-section');
             }
         } else if (page.toLowerCase() === 'products') {
             if (location.pathname === '/') {
-                const productsSection = document.getElementById('products-section');
-                if (productsSection) {
-                    productsSection.scrollIntoView({ behavior: 'smooth' });
-                }
+                scrollToElement('menu-section');
             } else {
-                navigate('/#products-section');
+                navigate('/#menu-section');
+            }
+        } else if (page.toLowerCase() === 'blog') {
+            if (location.pathname === '/') {
+                scrollToElement('blog-section');
+            } else {
+                navigate('/#blog-section');
             }
         } else {
-            let path;
             if (page.toLowerCase() === 'home') {
-                path = '/';
+                navigate('/');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                path = `/${page.toLowerCase()}`;
+                navigate(`/${page.toLowerCase()}`);
             }
-            
-            navigate(path);
         }
         
         handleCloseNavMenu();
     };
 
     React.useEffect(() => {
-        if (location.hash === '#about-section') {
+        // Handle direct URL navigation with hash
+        if (location.hash) {
+            const elementId = location.hash.substring(1); // Remove the # character
             setTimeout(() => {
-                const aboutSection = document.getElementById('about-section');
-                if (aboutSection) {
-                    aboutSection.scrollIntoView({ behavior: 'smooth' });
+                const element = document.getElementById(elementId);
+                if (element) {
+                    const navbarHeight = 80;
+                    const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+                    const offsetPosition = elementPosition - navbarHeight;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
                 }
-            }, 100);
-        } else if (location.hash === '#testimonials-section') {
-            setTimeout(() => {
-                const testimonialSection = document.getElementById('testimonials-section');
-                if (testimonialSection) {
-                    testimonialSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 100);
-        } else if (location.hash === '#products-section') {
-            setTimeout(() => {
-                const productsSection = document.getElementById('products-section');
-                if (productsSection) {
-                    productsSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 100);
+            }, 300);
+        }
+        
+        // Set active page based on URL
+        const pathname = location.pathname;
+        if (pathname === '/') {
+            setActivePage('Home');
+        } else if (pathname.includes('about')) {
+            setActivePage('About');
+        } else if (pathname.includes('products')) {
+            setActivePage('Products');
+        } else if (pathname.includes('blog')) {
+            setActivePage('Blog');
+        } else if (pathname.includes('reviews')) {
+            setActivePage('Reviews');
         }
     }, [location]);
 
     return (
         <ThemeProvider theme={theme}>
-             <Box sx={{
+             <Box 
+                sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    mb: 4,
                     position: 'fixed',
                     top: 0,
                     left: 0,
@@ -152,7 +183,9 @@ function CoffeeShopNavbar() {
                     transition: 'all 0.3s ease',
                     padding: '10px 20px',
                     backdropFilter: scrolled ? 'blur(5px)' : 'none',
-                }}> 
+                    transform: visible ? 'translateY(0)' : 'translateY(-100%)',
+                }}
+             > 
                     {/* Logo */}
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <GrainIcon sx={{ mr: 1, transform: 'rotate(45deg)', color: '#5C3824' }} />
@@ -222,7 +255,7 @@ function CoffeeShopNavbar() {
                     </Box>
                 </Box>
                 
-               <Box sx={{ height: '80px' }} /> 
+               <Box sx={{ height: '80px', mb: 0 }} /> 
             </ThemeProvider>
     );
 }

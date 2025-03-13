@@ -198,7 +198,8 @@ const CoffeeMenu: React.FC = () => {
                 borderRadius: '16px', // Added border radius for consistency
                 boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.04)', // Added shadow for consistency
                 py: { xs: 2, md: 3 }, // Reduced from py: { xs: 3, md: 5 } to reduce top padding
-                px: { xs: 1, md: 2 } // Added horizontal padding
+                px: { xs: 1, md: 2 }, // Added horizontal padding
+                scrollMarginTop: '90px', // Add scroll margin for fixed navbar
             }}
         >
             <Container maxWidth="lg">

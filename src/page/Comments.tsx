@@ -19,19 +19,19 @@ interface TestimonialProps {
 
 const testimonialData: TestimonialProps[] = [
   {
-    name: 'jan manWong',
+    name: 'Sayiman Won',
     rating: 5,
     comment: 'The atmosphere of the cafe was great. Everything was wonderful and I am grateful to all the staff. I made my own coffee and it was delicious',
     avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
   },
   {
-    name: 'mari song',
+    name: 'Seyry Khalifeh',
     rating: 4,
     comment: 'I celebrated my birthday at Zara and they had very delicious drinks. The environment was great and full of kind people. Thank you for your interesting idea',
     avatar: 'https://randomuser.me/api/portraits/women/44.jpg'
   },
   {
-    name: 'zahra khalifeh',
+    name: 'Ramii Khatib',
     rating: 5,
     comment: 'Thank you so much. Everything was great. I ordered a latte, which was slightly sweetened and much to my liking. I came with my children for a very good environment',
     avatar: 'https://randomuser.me/api/portraits/women/68.jpg'
