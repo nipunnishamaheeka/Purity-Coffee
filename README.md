@@ -85,8 +85,8 @@ This project was inspired by the love for coffee and the desire to create a digi
 - Integrate payment gateway for online orders
 
 ## 🖼️ Previews
-![Preview 1](https://raw.githubusercontent.com/nipunnishamaheeka/Purity-Coffee/main/src/assets/1.png)
-![Preview 2](https://raw.githubusercontent.com/nipunnishamaheeka/Purity-Coffee/main/src/assets/2.png)
+![Preview 1](https://github.com/nipunnishamaheeka/Purity-Coffee/blob/main/src/assets/1.png)
+![Preview 2](https://github.com/nipunnishamaheeka/Purity-Coffee/blob/main/src/assets/2.png)
 
 ## 💼 Contact
 Feel free to reach out or connect with me:
